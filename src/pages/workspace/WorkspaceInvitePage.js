@@ -83,6 +83,7 @@ class WorkspaceInvitePage extends React.Component {
             selectedOptions: [],
             userToInvite,
             welcomeNote: this.getWelcomeNote(),
+            isFocused: false, // multiline input focused status
         };
     }
 
@@ -266,6 +267,8 @@ class WorkspaceInvitePage extends React.Component {
                                 {didScreenTransitionEnd && (
                                 <OptionsSelector
                                     autoFocus={false}
+                                    disabled={this.state.isFocused}
+                                    keyboardShortcutShouldPreventDefault={false}
                                     canSelectMultipleOptions
                                     sections={sections}
                                     selectedOptions={this.state.selectedOptions}
@@ -308,6 +311,8 @@ class WorkspaceInvitePage extends React.Component {
                                         containerStyles={[styles.workspaceInviteWelcome]}
                                         value={this.state.welcomeNote}
                                         onChangeText={text => this.setState({welcomeNote: text})}
+                                        onFocus={() => this.setState({isFocused: true})}
+                                        onBlur={() => this.setState({isFocused: false})}
                                     />
                                 </View>
                                 <FormAlertWithSubmitButton

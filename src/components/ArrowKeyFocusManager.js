@@ -21,10 +21,15 @@ const propTypes = {
 
     /** A callback executed when the focused input changes. */
     onFocusedIndexChanged: PropTypes.func.isRequired,
+
+    disabled: PropTypes.bool,
+    keyboardShortcutShouldPreventDefault: PropTypes.bool,
 };
 
 const defaultProps = {
     disabledIndexes: [],
+    disabled: false,
+    keyboardShortcutShouldPreventDefault: true,
 };
 
 class ArrowKeyFocusManager extends Component {
@@ -33,7 +38,7 @@ class ArrowKeyFocusManager extends Component {
         const arrowDownConfig = CONST.KEYBOARD_SHORTCUTS.ARROW_DOWN;
 
         this.unsubscribeArrowUpKey = KeyboardShortcut.subscribe(arrowUpConfig.shortcutKey, () => {
-            if (this.props.maxIndex < 0) {
+            if (this.props.disabled || this.props.maxIndex < 0) {
                 return;
             }
 
@@ -48,10 +53,10 @@ class ArrowKeyFocusManager extends Component {
             }
 
             this.props.onFocusedIndexChanged(newFocusedIndex);
-        }, arrowUpConfig.descriptionKey, arrowUpConfig.modifiers, true);
+        }, arrowUpConfig.descriptionKey, arrowUpConfig.modifiers, true, undefined, undefined, this.props.keyboardShortcutShouldPreventDefault);
 
         this.unsubscribeArrowDownKey = KeyboardShortcut.subscribe(arrowDownConfig.shortcutKey, () => {
-            if (this.props.maxIndex < 0) {
+            if (this.props.disabled || this.props.maxIndex < 0) {
                 return;
             }
 
@@ -66,7 +71,7 @@ class ArrowKeyFocusManager extends Component {
             }
 
             this.props.onFocusedIndexChanged(newFocusedIndex);
-        }, arrowDownConfig.descriptionKey, arrowDownConfig.modifiers, true);
+        }, arrowDownConfig.descriptionKey, arrowDownConfig.modifiers, true, undefined, undefined, this.props.keyboardShortcutShouldPreventDefault);
     }
 
     componentWillUnmount() {

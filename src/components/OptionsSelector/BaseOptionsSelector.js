@@ -54,7 +54,7 @@ class BaseOptionsSelector extends Component {
             enterConfig.shortcutKey,
             () => {
                 const focusedOption = this.state.allOptions[this.state.focusedIndex];
-                if (!focusedOption) {
+                if (this.props.disabled || !focusedOption) {
                     return;
                 }
 
@@ -64,6 +64,8 @@ class BaseOptionsSelector extends Component {
             enterConfig.modifiers,
             true,
             () => !this.state.allOptions[this.state.focusedIndex],
+            undefined,
+            this.props.keyboardShortcutShouldPreventDefault,
         );
 
         const CTRLEnterConfig = CONST.KEYBOARD_SHORTCUTS.CTRL_ENTER;
@@ -272,8 +274,10 @@ class BaseOptionsSelector extends Component {
         ) : <FullScreenLoadingIndicator />;
         return (
             <ArrowKeyFocusManager
+                disabled={this.props.disabled}
                 disabledIndexes={this.disabledOptionsIndexes}
                 focusedIndex={this.state.focusedIndex}
+                keyboardShortcutShouldPreventDefault={this.props.keyboardShortcutShouldPreventDefault}
                 maxIndex={this.state.allOptions.length - 1}
                 onFocusedIndexChanged={this.props.disableArrowKeysActions ? () => {} : this.updateFocusedIndex}
             >
