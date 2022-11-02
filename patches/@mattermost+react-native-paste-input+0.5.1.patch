@@ -1,0 +1,85 @@
+diff --git a/node_modules/@mattermost/react-native-paste-input/android/src/main/java/com/mattermost/pasteinput/PasteInputFileFromUrl.kt b/node_modules/@mattermost/react-native-paste-input/android/src/main/java/com/mattermost/pasteinput/PasteInputFileFromUrl.kt
+index 4f68ee5..bf48d15 100644
+--- a/node_modules/@mattermost/react-native-paste-input/android/src/main/java/com/mattermost/pasteinput/PasteInputFileFromUrl.kt
++++ b/node_modules/@mattermost/react-native-paste-input/android/src/main/java/com/mattermost/pasteinput/PasteInputFileFromUrl.kt
+@@ -30,8 +30,8 @@ class PasteInputFileFromUrl(context: ReactContext, target: ReactEditText, uri: S
+       val file = Arguments.createMap()
+ 
+       file.putString("type", mimeType)
+-      file.putDouble("fileSize", fileSize.toDouble())
+-      file.putString("fileName", fileName)
++      file.putDouble("size", fileSize.toDouble())
++      file.putString("name", fileName)
+       file.putString("uri", mUri)
+ 
+       files = Arguments.createArray()
+diff --git a/node_modules/@mattermost/react-native-paste-input/android/src/main/java/com/mattermost/pasteinput/PasteInputListener.kt b/node_modules/@mattermost/react-native-paste-input/android/src/main/java/com/mattermost/pasteinput/PasteInputListener.kt
+index f998f0a..a3d1b70 100644
+--- a/node_modules/@mattermost/react-native-paste-input/android/src/main/java/com/mattermost/pasteinput/PasteInputListener.kt
++++ b/node_modules/@mattermost/react-native-paste-input/android/src/main/java/com/mattermost/pasteinput/PasteInputListener.kt
+@@ -50,8 +50,8 @@ class PasteInputListener(editText: PasteInputEditText) : IPasteInputListener {
+     }
+ 
+     uriString = RealPathUtil.getRealPathFromURI(reactContext, itemUri) ?: return
+-    extension = MimeTypeMap.getFileExtensionFromUrl(uriString) ?: return
+-    mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: return
++    extension = MimeTypeMap.getFileExtensionFromUrl(uriString)
++    mimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension) ?: uriMimeType
+     fileName = URLUtil.guessFileName(uriString, null, mimeType)
+ 
+     try {
+@@ -62,8 +62,8 @@ class PasteInputListener(editText: PasteInputEditText) : IPasteInputListener {
+       files = Arguments.createArray()
+       fileSize = assetFileDescriptor.length
+       file.putString("type", mimeType)
+-      file.putDouble("fileSize", fileSize.toDouble())
+-      file.putString("fileName", fileName)
++      file.putDouble("size", fileSize.toDouble())
++      file.putString("name", fileName)
+       file.putString("uri", "file://$uriString")
+ 
+       files.pushMap(file)
+diff --git a/node_modules/@mattermost/react-native-paste-input/ios/UIPasteboard+GetImageInfo.m b/node_modules/@mattermost/react-native-paste-input/ios/UIPasteboard+GetImageInfo.m
+index df52bb7..a4d16d8 100644
+--- a/node_modules/@mattermost/react-native-paste-input/ios/UIPasteboard+GetImageInfo.m
++++ b/node_modules/@mattermost/react-native-paste-input/ios/UIPasteboard+GetImageInfo.m
+@@ -60,8 +60,8 @@ @implementation UIPasteboard (GetImageInfo)
+           added = YES;
+           uri = tempFileURL.absoluteString;
+           [fileInfos addObject:@{
+-            @"fileName": tempFilename,
+-            @"fileSize": @([fileData length]),
++            @"name": tempFilename,
++            @"size": @([fileData length]),
+             @"type": mimeType,
+             @"uri": uri,
+           }];
+diff --git a/node_modules/@mattermost/react-native-paste-input/lib/typescript/src/types.d.ts b/node_modules/@mattermost/react-native-paste-input/lib/typescript/src/types.d.ts
+index 0a58308..97a06a4 100644
+--- a/node_modules/@mattermost/react-native-paste-input/lib/typescript/src/types.d.ts
++++ b/node_modules/@mattermost/react-native-paste-input/lib/typescript/src/types.d.ts
+@@ -1,7 +1,7 @@
+ import type { TextInputProps } from 'react-native';
+ export interface PastedFile {
+-    fileName: string;
+-    fileSize: number;
++    name: string;
++    size: number;
+     type: string;
+     uri: string;
+ }
+diff --git a/node_modules/@mattermost/react-native-paste-input/src/types.ts b/node_modules/@mattermost/react-native-paste-input/src/types.ts
+index 286c702..49c514f 100644
+--- a/node_modules/@mattermost/react-native-paste-input/src/types.ts
++++ b/node_modules/@mattermost/react-native-paste-input/src/types.ts
+@@ -1,8 +1,8 @@
+ import type { TextInputProps } from 'react-native';
+ 
+ export interface PastedFile {
+-    fileName: string;
+-    fileSize: number;
++    name: string;
++    size: number;
+     type: string;
+     uri: string;
+ }

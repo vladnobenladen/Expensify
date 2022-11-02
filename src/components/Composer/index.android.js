@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet} from 'react-native';
 import PropTypes from 'prop-types';
 import _ from 'underscore';
-import RNTextInput from '../RNTextInput';
+import PasteInput from '@mattermost/react-native-paste-input';
 import themeColors from '../../styles/themes/default';
 import CONST from '../../CONST';
 import * as ComposerUtils from '../../libs/ComposerUtils';
@@ -43,6 +43,8 @@ const propTypes = {
     // eslint-disable-next-line react/forbid-prop-types
     style: PropTypes.any,
 
+    /** Callback method to handle pasting a file */
+    onPasteFile: PropTypes.func,
 };
 
 const defaultProps = {
@@ -59,6 +61,7 @@ const defaultProps = {
     setIsFullComposerAvailable: () => {},
     isComposerFullSize: false,
     style: null,
+    onPasteFile: () => {},
 };
 
 class Composer extends React.Component {
@@ -93,7 +96,7 @@ class Composer extends React.Component {
 
     render() {
         return (
-            <RNTextInput
+            <PasteInput
                 autoComplete="off"
                 placeholderTextColor={themeColors.placeholderText}
                 ref={el => this.textInput = el}
@@ -105,6 +108,7 @@ class Composer extends React.Component {
                 /* eslint-disable-next-line react/jsx-props-no-spreading */
                 {...this.props}
                 editable={!this.props.isDisabled}
+                onPaste={(error, files) => this.props.onPasteFile(files[0])}
             />
         );
     }

@@ -476,6 +476,9 @@ PODS:
     - React-Core
   - react-native-netinfo (8.3.1):
     - React-Core
+  - react-native-paste-input (0.5.1):
+    - React-Core
+    - Swime (= 3.0.6)
   - react-native-pdf (6.6.2):
     - React-Core
   - react-native-plaid-link-sdk (7.4.0):
@@ -633,6 +636,7 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
   - SocketRocket (0.6.0)
+  - Swime (3.0.6)
   - urbanairship-react-native (14.4.1):
     - Airship (= 16.8.0)
     - React-Core
@@ -699,6 +703,7 @@ DEPENDENCIES:
   - "react-native-image-manipulator (from `../node_modules/@oguzhnatly/react-native-image-manipulator`)"
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
+  - "react-native-paste-input (from `../node_modules/@mattermost/react-native-paste-input`)"
   - react-native-pdf (from `../node_modules/react-native-pdf`)
   - react-native-plaid-link-sdk (from `../node_modules/react-native-plaid-link-sdk`)
   - "react-native-progress-bar-android (from `../node_modules/@react-native-community/progress-bar-android`)"
@@ -772,6 +777,7 @@ SPEC REPOS:
     - SDWebImage
     - SDWebImageWebPCoder
     - SocketRocket
+    - Swime
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -843,6 +849,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-image-picker"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
+  react-native-paste-input:
+    :path: "../node_modules/@mattermost/react-native-paste-input"
   react-native-pdf:
     :path: "../node_modules/react-native-pdf"
   react-native-plaid-link-sdk:
@@ -982,6 +990,7 @@ SPEC CHECKSUMS:
   react-native-image-manipulator: c48f64221cfcd46e9eec53619c4c0374f3328a56
   react-native-image-picker: cd420f97f6ed6ff74fc4686d27dbcfdbd051db91
   react-native-netinfo: 1a6035d3b9780221d407c277ebfb5722ace00658
+  react-native-paste-input: 183ad7dc224e192719616f4258dde5b548627d08
   react-native-pdf: 33c622cbdf776a649929e8b9d1ce2d313347c4fa
   react-native-plaid-link-sdk: 77052f329310ff5a36ddda276793f40d27c02bc4
   react-native-progress-bar-android: be43138ab7da30d51fc038bafa98e9ed594d0c40
@@ -1019,6 +1028,7 @@ SPEC CHECKSUMS:
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  Swime: d7b2c277503b6cea317774aedc2dce05613f8b0b
   urbanairship-react-native: 7e2e9a84c541b1d04798e51f7f390a2d5806eac0
   Yoga: affc5393470ecec3069bd7bf05d5877afffff995
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
