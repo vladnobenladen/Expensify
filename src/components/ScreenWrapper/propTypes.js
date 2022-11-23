@@ -23,6 +23,9 @@ const propTypes = {
      *  Search 'switch(behavior)' in ./node_modules/react-native/Libraries/Components/Keyboard/KeyboardAvoidingView.js for more context */
     keyboardAvoidingViewBehavior: PropTypes.oneOf(['padding', 'height', 'position']),
 
+    /** Whether to enable keyboard avoiding view */
+    keyboardAvoidingViewEnabled: PropTypes.bool,
+
     /** Details about any modals being used */
     modal: PropTypes.shape({
         /** Indicates when an Alert modal is about to be visible */
@@ -37,6 +40,7 @@ const defaultProps = {
     onTransitionEnd: () => {},
     modal: {},
     keyboardAvoidingViewBehavior: 'padding',
+    keyboardAvoidingViewEnabled: true,
 };
 
 export {propTypes, defaultProps};

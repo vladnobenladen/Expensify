@@ -88,7 +88,7 @@ class BaseScreenWrapper extends React.Component {
                                 paddingStyle,
                             ]}
                         >
-                            <KeyboardAvoidingView style={[styles.w100, styles.h100]} behavior={this.props.keyboardAvoidingViewBehavior}>
+                            <KeyboardAvoidingView style={[styles.w100, styles.flex1]} behavior={this.props.keyboardAvoidingViewBehavior} enabled={this.props.keyboardAvoidingViewEnabled}>
                                 <HeaderGap />
                                 {// If props.children is a function, call it to provide the insets to the children.
                                     _.isFunction(this.props.children)

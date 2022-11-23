@@ -11,7 +11,7 @@ const ScreenWrapper = props => (
     </BaseScreenWrapper>
 );
 
-defaultProps.keyboardAvoidingViewBehavior = 'height';
+defaultProps.keyboardAvoidingViewEnabled = false;
 
 ScreenWrapper.propTypes = propTypes;
 ScreenWrapper.defaultProps = defaultProps;
