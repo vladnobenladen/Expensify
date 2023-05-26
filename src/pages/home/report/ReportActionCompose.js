@@ -425,9 +425,7 @@ class ReportActionCompose extends React.Component {
 
     // eslint-disable-next-line rulesdir/prefer-early-return
     setShouldBlockEmojiCalcToFalse() {
-        if (this.state && this.state.shouldBlockEmojiCalc) {
-            this.setState({shouldBlockEmojiCalc: false});
-        }
+        this.shouldBlockEmojiCalc = false;
     }
 
     /**
@@ -513,8 +511,8 @@ class ReportActionCompose extends React.Component {
      * Calculates and cares about the content of an Emoji Suggester
      */
     calculateEmojiSuggestion() {
-        if (this.state.shouldBlockEmojiCalc) {
-            this.setState({shouldBlockEmojiCalc: false});
+        if (this.shouldBlockEmojiCalc) {
+            this.shouldBlockEmojiCalc = false;
             return;
         }
         const leftString = this.state.value.substring(0, this.state.selection.end);
@@ -1028,7 +1026,7 @@ class ReportActionCompose extends React.Component {
                                                                 // Set a flag to block emoji calculation until we're finished using the file picker,
                                                                 // which will stop any flickering as the file picker opens on non-native devices.
                                                                 if (this.willBlurTextInputOnTapOutside) {
-                                                                    this.setState({shouldBlockEmojiCalc: true});
+                                                                    this.shouldBlockEmojiCalc = true;
                                                                 }
 
                                                                 openPicker({
