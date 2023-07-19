@@ -97,14 +97,13 @@ function hasCommentThread(reportAction) {
  * Returns the parentReportAction if the given report is a thread/task.
  *
  * @param {Object} report
- * @param {Object} [allReportActionsParam]
  * @returns {Object}
  */
-function getParentReportAction(report, allReportActionsParam = {}) {
+function getParentReportAction(report) {
     if (!report || !report.parentReportID || !report.parentReportActionID) {
         return {};
     }
-    return lodashGet(allReportActionsParam || allReportActions, [report.parentReportID, report.parentReportActionID], {});
+    return lodashGet(allReportActions, [report.parentReportID, report.parentReportActionID], {});
 }
 
 /**

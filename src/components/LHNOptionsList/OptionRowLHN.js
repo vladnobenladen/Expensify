@@ -1,7 +1,8 @@
 import _ from 'underscore';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {View, StyleSheet} from 'react-native';
+import lodashGet from 'lodash/get';
 import * as optionRowStyles from '../../styles/optionRowStyles';
 import styles from '../../styles/styles';
 import * as StyleUtils from '../../styles/StyleUtils';
@@ -11,21 +12,29 @@ import MultipleAvatars from '../MultipleAvatars';
 import Hoverable from '../Hoverable';
 import DisplayNames from '../DisplayNames';
 import colors from '../../styles/colors';
+import withLocalize, {withLocalizePropTypes} from '../withLocalize';
+import {withReportCommentDrafts} from '../OnyxProvider';
 import Text from '../Text';
 import SubscriptAvatar from '../SubscriptAvatar';
 import CONST from '../../CONST';
 import themeColors from '../../styles/themes/default';
+import SidebarUtils from '../../libs/SidebarUtils';
 import OfflineWithFeedback from '../OfflineWithFeedback';
 import PressableWithSecondaryInteraction from '../PressableWithSecondaryInteraction';
 import * as ReportActionContextMenu from '../../pages/home/report/ContextMenu/ReportActionContextMenu';
 import * as ContextMenuActions from '../../pages/home/report/ContextMenu/ContextMenuActions';
 import * as OptionsListUtils from '../../libs/OptionsListUtils';
-import useLocalize from '../../hooks/useLocalize';
+import compose from '../../libs/compose';
+import ONYXKEYS from '../../ONYXKEYS';
+import * as Report from '../../libs/actions/Report';
 
 const propTypes = {
     /** Style for hovered state */
     // eslint-disable-next-line react/forbid-prop-types
     hoverStyle: PropTypes.object,
+
+    /** The comment left by the user */
+    comment: PropTypes.string,
 
     /** The ID of the report that the option is for */
     reportID: PropTypes.string.isRequired,
@@ -41,25 +50,29 @@ const propTypes = {
 
     style: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.object), PropTypes.object]),
 
-    /** The item that should be rendered */
-    // eslint-disable-next-line react/forbid-prop-types
-    optionItem: PropTypes.object,
+    ...withLocalizePropTypes,
 };
 
 const defaultProps = {
     hoverStyle: styles.sidebarLinkHover,
     viewMode: 'default',
     onSelectRow: () => {},
-    style: null,
-    optionItem: null,
     isFocused: false,
+    style: null,
+    comment: '',
 };
 
 function OptionRowLHN(props) {
-    const localize = useLocalize();
-
-    const optionItem = props.optionItem;
+    const optionItem = SidebarUtils.getOptionData(props.reportID);
     const [isContextMenuActive, setIsContextMenuActive] = useState(false);
+
+    useEffect(() => {
+        if (!optionItem || optionItem.hasDraftComment || !props.comment || props.comment.length <= 0 || props.isFocused) {
+            return;
+        }
+        Report.setReportWithDraft(props.reportID, true);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     if (!optionItem) {
         return null;
@@ -156,7 +169,7 @@ function OptionRowLHN(props) {
                             (hovered || isContextMenuActive) && !props.isFocused ? props.hoverStyle : null,
                         ]}
                         accessibilityRole={CONST.ACCESSIBILITY_ROLE.BUTTON}
-                        accessibilityLabel={localize.translate('accessibilityHints.navigatesToChat')}
+                        accessibilityLabel={props.translate('accessibilityHints.navigatesToChat')}
                     >
                         <View style={sidebarInnerRowStyle}>
                             <View style={[styles.flexRow, styles.alignItemsCenter]}>
@@ -184,7 +197,7 @@ function OptionRowLHN(props) {
                                 <View style={contentContainerStyles}>
                                     <View style={[styles.flexRow, styles.alignItemsCenter, styles.mw100, styles.overflowHidden]}>
                                         <DisplayNames
-                                            accessibilityLabel={localize.translate('accessibilityHints.chatUserDisplayNames')}
+                                            accessibilityLabel={props.translate('accessibilityHints.chatUserDisplayNames')}
                                             fullTitle={optionItem.text}
                                             displayNamesWithTooltips={optionItem.displayNamesWithTooltips}
                                             tooltipEnabled
@@ -199,7 +212,7 @@ function OptionRowLHN(props) {
                                         <Text
                                             style={alternateTextStyle}
                                             numberOfLines={1}
-                                            accessibilityLabel={localize.translate('accessibilityHints.lastChatMessagePreview')}
+                                            accessibilityLabel={props.translate('accessibilityHints.lastChatMessagePreview')}
                                         >
                                             {optionItem.alternateText}
                                         </Text>
@@ -233,7 +246,7 @@ function OptionRowLHN(props) {
                             {optionItem.hasDraftComment && (
                                 <View
                                     style={styles.ml2}
-                                    accessibilityLabel={localize.translate('sidebarScreen.draftedMessage')}
+                                    accessibilityLabel={props.translate('sidebarScreen.draftedMessage')}
                                 >
                                     <Icon src={Expensicons.Pencil} />
                                 </View>
@@ -241,7 +254,7 @@ function OptionRowLHN(props) {
                             {!shouldShowGreenDotIndicator && optionItem.isPinned && (
                                 <View
                                     style={styles.ml2}
-                                    accessibilityLabel={localize.translate('sidebarScreen.chatPinned')}
+                                    accessibilityLabel={props.translate('sidebarScreen.chatPinned')}
                                 >
                                     <Icon src={Expensicons.Pin} />
                                 </View>
@@ -258,6 +271,13 @@ OptionRowLHN.propTypes = propTypes;
 OptionRowLHN.defaultProps = defaultProps;
 OptionRowLHN.displayName = 'OptionRowLHN';
 
-export default React.memo(OptionRowLHN);
-
-export {propTypes, defaultProps};
+export default compose(
+    withLocalize,
+    withReportCommentDrafts({
+        propName: 'comment',
+        transformValue: (drafts, props) => {
+            const draftKey = `${ONYXKEYS.COLLECTION.REPORT_DRAFT_COMMENT}${props.reportID}`;
+            return lodashGet(drafts, draftKey, '');
+        },
+    }),
+)(OptionRowLHN);
