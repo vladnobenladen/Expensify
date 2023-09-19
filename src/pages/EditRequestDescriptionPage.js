@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import PropTypes from 'prop-types';
 import TextInput from '../components/TextInput';
@@ -10,6 +10,7 @@ import styles from '../styles/styles';
 import Navigation from '../libs/Navigation/Navigation';
 import CONST from '../CONST';
 import useLocalize from '../hooks/useLocalize';
+import focusAndUpdateMultilineInputRange from '../libs/focusAndUpdateMultilineInputRange';
 import * as Browser from '../libs/Browser';
 
 const propTypes = {
@@ -22,12 +23,10 @@ const propTypes = {
 
 function EditRequestDescriptionPage({defaultDescription, onSubmit}) {
     const {translate} = useLocalize();
-    const descriptionInputRef = useRef(null);
     return (
         <ScreenWrapper
             includeSafeAreaPaddingBottom={false}
             shouldEnableMaxHeight
-            onEntryTransitionEnd={() => descriptionInputRef.current && descriptionInputRef.current.focus()}
         >
             <HeaderWithBackButton
                 title={translate('common.description')}
@@ -49,7 +48,7 @@ function EditRequestDescriptionPage({defaultDescription, onSubmit}) {
                         label={translate('moneyRequestConfirmationList.whatsItFor')}
                         accessibilityLabel={translate('moneyRequestConfirmationList.whatsItFor')}
                         accessibilityRole={CONST.ACCESSIBILITY_ROLE.TEXT}
-                        ref={(e) => (descriptionInputRef.current = e)}
+                        ref={focusAndUpdateMultilineInputRange}
                         autoGrowHeight
                         containerStyles={[styles.autoGrowHeightMultilineInput]}
                         textAlignVertical="top"

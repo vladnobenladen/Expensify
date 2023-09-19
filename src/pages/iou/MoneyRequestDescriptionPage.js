@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect} from 'react';
 import {View} from 'react-native';
 import {withOnyx} from 'react-native-onyx';
 import PropTypes from 'prop-types';
@@ -53,7 +53,6 @@ const defaultProps = {
 
 function MoneyRequestDescriptionPage({iou, route, selectedTab}) {
     const {translate} = useLocalize();
-    const inputRef = useRef(null);
     const iouType = lodashGet(route, 'params.iouType', '');
     const reportID = lodashGet(route, 'params.reportID', '');
     const isDistanceRequest = MoneyRequestUtils.isDistanceRequest(iouType, selectedTab);
@@ -89,7 +88,6 @@ function MoneyRequestDescriptionPage({iou, route, selectedTab}) {
         <ScreenWrapper
             includeSafeAreaPaddingBottom={false}
             shouldEnableMaxHeight
-            onEntryTransitionEnd={() => focusAndUpdateMultilineInputRange(inputRef.current)}
         >
             <HeaderWithBackButton
                 title={translate('common.description')}
@@ -110,7 +108,7 @@ function MoneyRequestDescriptionPage({iou, route, selectedTab}) {
                         label={translate('moneyRequestConfirmationList.whatsItFor')}
                         accessibilityLabel={translate('moneyRequestConfirmationList.whatsItFor')}
                         accessibilityRole={CONST.ACCESSIBILITY_ROLE.TEXT}
-                        ref={(el) => (inputRef.current = el)}
+                        ref={focusAndUpdateMultilineInputRange}
                         autoGrowHeight
                         containerStyles={[styles.autoGrowHeightMultilineInput]}
                         textAlignVertical="top"

@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {View} from 'react-native';
 import {withOnyx} from 'react-native-onyx';
 import PropTypes from 'prop-types';
@@ -39,8 +39,6 @@ const defaultProps = {
 };
 
 function NewTaskDescriptionPage(props) {
-    const inputRef = useRef(null);
-
     // On submit, we want to call the assignTask function and wait to validate
     // the response
     const onSubmit = (values) => {
@@ -55,7 +53,6 @@ function NewTaskDescriptionPage(props) {
     return (
         <ScreenWrapper
             includeSafeAreaPaddingBottom={false}
-            onEntryTransitionEnd={() => focusAndUpdateMultilineInputRange(inputRef.current)}
             shouldEnableMaxHeight
         >
             <HeaderWithBackButton
@@ -77,7 +74,7 @@ function NewTaskDescriptionPage(props) {
                         label={props.translate('newTaskPage.descriptionOptional')}
                         accessibilityLabel={props.translate('newTaskPage.descriptionOptional')}
                         accessibilityRole={CONST.ACCESSIBILITY_ROLE.TEXT}
-                        ref={(el) => (inputRef.current = el)}
+                        ref={focusAndUpdateMultilineInputRange}
                         autoGrowHeight
                         submitOnEnter={!Browser.isMobile()}
                         containerStyles={[styles.autoGrowHeightMultilineInput]}

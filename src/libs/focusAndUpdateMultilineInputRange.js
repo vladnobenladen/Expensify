@@ -1,3 +1,6 @@
+import CONST from '../CONST';
+import shouldDelayFocus from './shouldDelayFocus';
+
 /**
  * Focus a multiline text input and place the cursor at the end of the value (if there is a value in the input).
  *
@@ -14,7 +17,11 @@ export default function focusAndUpdateMultilineInputRange(input) {
         return;
     }
 
-    input.focus();
+    if (shouldDelayFocus) {
+        setTimeout(() => input.focus(), CONST.ANIMATED_TRANSITION);
+    } else {
+        input.focus();
+    }
     if (input.value && input.setSelectionRange) {
         const length = input.value.length;
         input.setSelectionRange(length, length);
